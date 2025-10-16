@@ -13,3 +13,8 @@ export async function getById(id: string) {
   const all = await getAll();
   return all.find(x => x.id === id) ?? null;
 }
+export async function removeById(id: string) {
+  const list = await getAll();
+  const next = list.filter(x => x.id !== id);
+  await saveAll(next);
+}
