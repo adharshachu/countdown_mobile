@@ -2,20 +2,22 @@ import TimeBlock from "@/components/TimeBlock";
 import { getRemaining } from "@/lib/countdown";
 import { getById, type Countdown } from "@/lib/storage";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
 export default function ViewScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [item, setItem] = useState<Countdown | null>(null);
-  const [, force] = useState(0);
-  const timer = useRef<NodeJS.Timer | null>(null);
+  const [, forceTick] = useState(0);
 
-  useEffect(() => { (async () => setItem(id ? await getById(id) : null))(); }, [id]);
+  useEffect(() => {
+    (async () => setItem(id ? await getById(id) : null))();
+  }, [id]);
+
   useEffect(() => {
     const interval = setInterval(() => forceTick(t => t + 1), 1000);
     return () => clearInterval(interval);
-}, []);
+  }, []);
 
   if (!item) return <View style={{ flex:1, alignItems:"center", justifyContent:"center" }}><Text>Loading…</Text></View>;
 
