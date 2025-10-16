@@ -12,7 +12,10 @@ export default function ViewScreen() {
   const timer = useRef<NodeJS.Timer | null>(null);
 
   useEffect(() => { (async () => setItem(id ? await getById(id) : null))(); }, [id]);
-  useEffect(() => { timer.current = setInterval(() => force(t => t + 1), 1000); return () => timer.current && clearInterval(timer.current); }, []);
+  useEffect(() => {
+    const interval = setInterval(() => forceTick(t => t + 1), 1000);
+    return () => clearInterval(interval);
+}, []);
 
   if (!item) return <View style={{ flex:1, alignItems:"center", justifyContent:"center" }}><Text>Loading…</Text></View>;
 
